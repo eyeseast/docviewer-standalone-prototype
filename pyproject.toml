@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "docviewer-standalone-prototype"
+version = "0.1.0"
+description = ""
+authors = ["Chris Amico <eyeseast@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "docviewer_standalone_prototype"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-documentcloud = "^3.6.0"
+httpx = "^0.25.0"
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.15.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

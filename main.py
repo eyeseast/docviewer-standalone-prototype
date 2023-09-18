@@ -1,16 +1,11 @@
 """
-This is a hello world add-on for DocumentCloud.
-
-It demonstrates how to write a add-on which can be activated from the
-DocumentCloud add-on system and run using Github Actions.  It receives data
-from DocumentCloud via the request dispatch and writes data back to
-DocumentCloud using the standard API
+Fetch all assets required to embed a DocumentCloud viewer that can work offline.
 """
 
 from documentcloud.addon import AddOn
 
 
-class HelloWorld(AddOn):
+class ExportViewer(AddOn):
     """An example Add-On for DocumentCloud."""
 
     def main(self):
@@ -35,4 +30,4 @@ class HelloWorld(AddOn):
 
 
 if __name__ == "__main__":
-    HelloWorld().main()
+    ExportViewer().main()
