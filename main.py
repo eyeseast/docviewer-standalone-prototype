@@ -28,8 +28,9 @@ class ExportViewer(AddOn):
             fetch.page_positions(document)
             fetch.images(document)
 
-        self.set_message("Uploading archive")
-        archive = shutil.make_archive("assets", "zip", base_dir="assets")
+        name = self.data.get("name", "assets")
+        self.set_message(f"Uploading archive: {name}")
+        archive = shutil.make_archive(name, "zip", base_dir="assets")
 
         with open(archive) as f:
             self.upload_file(f)
