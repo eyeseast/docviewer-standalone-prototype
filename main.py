@@ -2,7 +2,7 @@
 """
 Fetch all assets required to embed a DocumentCloud viewer that can work offline.
 """
-
+import shutil
 from documentcloud.addon import AddOn
 
 import fetch
@@ -14,7 +14,6 @@ class ExportViewer(AddOn):
     def main(self):
         """The main add-on functionality goes here."""
 
-        # add a hello note to the first page of each selected document
         for document in self.get_documents():
             # get_documents will iterate through all documents efficiently,
             # either selected or by query, dependeing on which is passed in
@@ -28,6 +27,12 @@ class ExportViewer(AddOn):
             fetch.page_text(document)
             fetch.page_positions(document)
             fetch.images(document)
+
+        self.set_message("Uploading archive")
+        archive = shutil.make_archive("assets", "zip", base_dir="assets")
+
+        with open(archive) as f:
+            self.upload_file(f)
 
 
 if __name__ == "__main__":
