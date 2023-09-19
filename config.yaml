@@ -15,5 +15,10 @@ categories:
 # Acceptable categories are premium, ai, export, bulk, file,  monitor, statistical, and extraction.
 # You can read more about DocumentCloud Add-On categories here: https://www.documentcloud.org/help/add-ons#types-of-add-ons
 
-# no properties for now, but we need this key
-properties: {}
+# you can name the output folder, if you want
+properties:
+  name:
+    type: string
+    title: Name
+    description: Name for the archive you'll download, without a file extension
+    default: assets
