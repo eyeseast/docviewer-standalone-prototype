@@ -1,0 +1,21 @@
+{
+  "name": "docviewer-standalone-prototype",
+  "version": "0.0.0",
+  "description": "This is a prototype document viewer for DocumentCloud. It should create a version of a DocumentCloud embed that will work without an internet connection.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "autoprefixer": "^10.4.16",
+    "svelte": "^3.0.0",
+    "svelte-i18n": "^3.7.4",
+    "svelte-preprocess": "^5.0.4",
+    "vite": "^4.4.5"
+  }
+}

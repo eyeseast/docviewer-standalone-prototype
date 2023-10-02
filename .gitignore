@@ -32,5 +32,10 @@ MANIFEST
 # Environments
 .env
 
+assets/api
 assets/documents
 *.zip
+
+node_modules
+vite-project
+.vscode

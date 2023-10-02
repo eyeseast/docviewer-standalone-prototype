@@ -32,7 +32,7 @@ def document(client: DocumentCloud, id: int):
     url = urljoin(client.base_uri, f"{client.documents.api_path}/{id}.json")
     params = {"expand": EXPAND}
 
-    output = DOCUMENTS / f"{id}.json"
+    output = ASSETS / "api" / "documents" / f"{id}.json"
     resp = httpx.get(url, params=params)
 
     resp.raise_for_status()
