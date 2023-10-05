@@ -4,59 +4,57 @@
 
   import NotFound from "documentcloud-frontend/src/pages/NotFound.svelte";
   import Empty from "documentcloud-frontend/src/pages/home/Empty.svelte";
-
-  import Index from "./Index.svelte";
   import Viewer from "documentcloud-frontend/src/pages/viewer/Viewer.svelte";
 
   import { router } from "documentcloud-frontend/src/router/router.js";
-  import { lazyComponent } from "documentcloud-frontend/src/util/lazyComponent.js";
+  import { viewer } from "documentcloud-frontend/src/viewer/viewer.js";
+  import { layout } from "documentcloud-frontend/src/viewer/layout.js";
 
   import "documentcloud-frontend/src/langs/i18n.js";
 
-  lazyComponent.default = Index;
-  lazyComponent.viewer = Viewer;
+  import Index from "./Index.svelte";
+
+  let component;
 
   // inline everything we can to avoid accidental imports
-  function loadDefault() {
-    if (lazyComponent.default !== null) return;
-    return import("./Index.svelte").then((module) => {
-      lazyComponent.default = module.default;
-    });
-  }
-
-  function loadViewer() {
-    if (lazyComponent.viewer !== null) return;
-    return import("documentcloud-frontend/src/pages/viewer/Viewer.svelte").then(
-      (module) => {
-        lazyComponent.viewer = module.default;
-      }
-    );
-  }
-
   router.notFound = NotFound;
-  router.routeFunc = function route(lazyComponent) {
+  router.routeFunc = function route() {
     return {
-      default: {
+      app: {
         path: "/",
-        component: lazyComponent.default,
-        get: loadDefault,
+        component: Index,
       },
 
       viewer: {
         path: "/documents/:id",
-        component: lazyComponent.viewer,
-        get: loadViewer,
+        component: Viewer,
       },
     };
   };
+
+  viewer.router = router;
+  layout.router = router;
+
+  function handleBackNav(e) {
+    console.log(e);
+    if (e.state == null) return;
+    router.currentUrl = e.state.path;
+  }
 
   $: routeComponent =
     ($router.resolvedRoute || { component: Empty }).component || Empty;
   $: routeProps = ($router.resolvedRoute || { props: [] }).props || {};
 
+  $: console.log($router.resolvedRoute);
+  $: console.log(component);
+
   onMount(() => {
     window.router = router;
-    router.currentUrl = window.location.pathname;
+    window.viewer = viewer;
+    window.layout = layout;
+    window.component = component;
+
+    router.currentUrl = window.location.pathname + window.location.search;
 
     if (!window.history.state) {
       window.history.replaceState(
@@ -68,8 +66,14 @@
   });
 </script>
 
+<svelte:window on:popstate={handleBackNav} />
+
 {#if $isLoading}
   Please wait...
 {:else if $router.resolvedRoute}
-  <svelte:component this={routeComponent} {...routeProps} />
+  <svelte:component
+    this={routeComponent}
+    bind:this={component}
+    {...routeProps}
+  />
 {/if}

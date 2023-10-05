@@ -1,8 +1,12 @@
 import path from "node:path";
+import url from "node:url";
 import { defineConfig, loadEnv } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 
 import allowedKeys from "./env.json";
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -18,7 +22,11 @@ export default defineConfig(({ mode }) => {
 
     resolve: {
       alias: {
-        "@": path.resolve("node_modules/documentcloud-frontend/src"),
+        "@": path.resolve(__dirname, "documentcloud-frontend/src"),
+        "documentcloud-frontend": path.resolve(
+          __dirname,
+          "documentcloud-frontend"
+        ),
       },
     },
 

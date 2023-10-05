@@ -1,5 +1,11 @@
+import path from "node:path";
+import url from "node:url";
+
 import sveltePreprocess from "svelte-preprocess";
 import autoprefixer from "autoprefixer";
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function scssAliases(aliases) {
   return (url) => {
@@ -15,14 +21,17 @@ function scssAliases(aliases) {
 }
 
 export default {
+  compilerOptions: {
+    accessors: true,
+  },
   // Consult https://svelte.dev/docs#compile-time-svelte-preprocess
   // for more information about preprocessors
   preprocess: sveltePreprocess({
     scss: {
-      includePaths: ["node_modules", "src"],
+      includePaths: ["documentcloud-frontend/src"],
       importer: [
         scssAliases({
-          "@": "node_modules/documentcloud-frontend/src",
+          "@": path.resolve(__dirname, "documentcloud-frontend/src"),
         }),
       ],
       prependData: '@import "@/style/variables.scss";',
