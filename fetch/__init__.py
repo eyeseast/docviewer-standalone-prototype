@@ -31,9 +31,10 @@ def document(client: DocumentCloud, id: int):
     print("Downloading document data")
     url = urljoin(client.base_uri, f"{client.documents.api_path}/{id}.json")
     params = {"expand": EXPAND}
+    auth = (client.username, client.password)
 
     output = ASSETS / "api" / "documents" / f"{id}.json"
-    resp = httpx.get(url, params=params)
+    resp = httpx.get(url, params=params, auth=auth)
 
     resp.raise_for_status()
 
