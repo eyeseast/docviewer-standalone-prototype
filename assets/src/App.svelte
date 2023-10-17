@@ -32,11 +32,7 @@
     };
   };
 
-  viewer.router = router;
-  layout.router = router;
-
   function handleBackNav(e) {
-    console.log(e);
     if (e.state == null) return;
     router.currentUrl = e.state.path;
   }
@@ -44,9 +40,6 @@
   $: routeComponent =
     ($router.resolvedRoute || { component: Empty }).component || Empty;
   $: routeProps = ($router.resolvedRoute || { props: [] }).props || {};
-
-  $: console.log($router.resolvedRoute);
-  $: console.log(component);
 
   onMount(() => {
     window.router = router;

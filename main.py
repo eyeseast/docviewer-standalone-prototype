@@ -18,15 +18,7 @@ class ExportViewer(AddOn):
             # get_documents will iterate through all documents efficiently,
             # either selected or by query, dependeing on which is passed in
             self.set_message(f"Fetching assets for document: {document.title}")
-
-            # fetch all the things, maybe someday this is async
-            fetch.document(self.client, document.id)
-            fetch.pdf(document)
-            fetch.full_text(document)
-            fetch.json_text(document)
-            fetch.page_text(document)
-            fetch.page_positions(document)
-            fetch.images(document)
+            fetch.all(self.client, document)
 
         name = self.data.get("name", "assets")
         self.set_message(f"Uploading archive: {name}")
