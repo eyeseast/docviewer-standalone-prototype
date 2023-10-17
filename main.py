@@ -20,6 +20,9 @@ class ExportViewer(AddOn):
             self.set_message(f"Fetching assets for document: {document.title}")
             fetch.all(self.client, document)
 
+        # .env
+        shutil.copyfile("assets/env.sample", "assets/.env")
+
         name = self.data.get("name", "assets")
         self.set_message(f"Uploading archive: {name}")
         archive = shutil.make_archive(name, "zip", base_dir="assets")
