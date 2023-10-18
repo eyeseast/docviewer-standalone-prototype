@@ -18,6 +18,13 @@ export default defineConfig(({ mode }) => {
   }, {});
 
   return {
+    build: {
+      sourcemap: true,
+      minify: false,
+    },
+
+    define,
+
     plugins: [svelte()],
 
     resolve: {
@@ -29,7 +36,5 @@ export default defineConfig(({ mode }) => {
         ),
       },
     },
-
-    define,
   };
 });
