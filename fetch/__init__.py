@@ -40,6 +40,27 @@ def all(client: DocumentCloud, document: Document):
     images(document)
 
 
+def document_list(client: DocumentCloud, ids: list):
+    "Download JSON to list documents"
+    url = urljoin(client.base_uri, f"{client.documents.api_path}.json")
+    params = {"id__in": ",".join(map(str, ids))}
+    auth = (client.username, client.password)
+    output = ASSETS / "api" / "documents.json"
+
+    resp = httpx.get(url, params=params, auth=auth)
+    resp.raise_for_status()
+
+    docs = resp.json()
+    for doc in docs["results"]:
+        doc["asset_url"] = ASSET_URL
+
+    # save our data
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    with output.open("w") as f:
+        json.dump(docs, f, indent=2)
+
+
 def document_data(client: DocumentCloud, id: int):
     "Download JSON data for a single document"
     print("Downloading document data")
@@ -48,8 +69,8 @@ def document_data(client: DocumentCloud, id: int):
     auth = (client.username, client.password)
 
     output = ASSETS / "api" / "documents" / f"{id}.json"
-    resp = httpx.get(url, params=params, auth=auth)
 
+    resp = httpx.get(url, params=params, auth=auth)
     resp.raise_for_status()
 
     # fix asset URL for local hosting

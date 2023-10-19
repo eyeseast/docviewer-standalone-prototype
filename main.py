@@ -14,6 +14,8 @@ class ExportViewer(AddOn):
     def main(self):
         """The main add-on functionality goes here."""
 
+        fetch.document_list(self.client, self.documents)
+
         for document in self.get_documents():
             # get_documents will iterate through all documents efficiently,
             # either selected or by query, dependeing on which is passed in
