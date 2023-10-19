@@ -25,21 +25,63 @@ EXPAND = [
     "notes.user",
 ]
 
+ASSET_URL = "http://localhost:5173/"
 
-def document(client: DocumentCloud, id: int):
+
+def all(client: DocumentCloud, document: Document):
+    "Run all the functions below, in order"
+
+    document_data(client, document.id)
+    pdf(document)
+    full_text(document)
+    json_text(document)
+    page_text(document)
+    page_positions(document)
+    images(document)
+
+
+def document_list(client: DocumentCloud, ids: list):
+    "Download JSON to list documents"
+    url = urljoin(client.base_uri, f"{client.documents.api_path}.json")
+    params = {"id__in": ",".join(map(str, ids))}
+    auth = (client.username, client.password)
+    output = ASSETS / "api" / "documents.json"
+
+    resp = httpx.get(url, params=params, auth=auth)
+    resp.raise_for_status()
+
+    docs = resp.json()
+    for doc in docs["results"]:
+        doc["asset_url"] = ASSET_URL
+
+    # save our data
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    with output.open("w") as f:
+        json.dump(docs, f, indent=2)
+
+
+def document_data(client: DocumentCloud, id: int):
     "Download JSON data for a single document"
     print("Downloading document data")
     url = urljoin(client.base_uri, f"{client.documents.api_path}/{id}.json")
     params = {"expand": EXPAND}
+    auth = (client.username, client.password)
 
-    output = DOCUMENTS / f"{id}.json"
-    resp = httpx.get(url, params=params)
+    output = ASSETS / "api" / "documents" / f"{id}.json"
 
+    resp = httpx.get(url, params=params, auth=auth)
     resp.raise_for_status()
+
+    # fix asset URL for local hosting
+    data = resp.json()
+    data["asset_url"] = ASSET_URL
 
     # save our data
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_bytes(resp.content)
+
+    with output.open("w") as f:
+        json.dump(data, f, indent=2)
 
 
 def pdf(doc: Document):
