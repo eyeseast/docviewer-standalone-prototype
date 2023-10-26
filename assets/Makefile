@@ -16,4 +16,4 @@ build:
 	npm run build
 
 run:
-	npm start
+	npm run dev
