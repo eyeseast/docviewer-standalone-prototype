@@ -42,12 +42,11 @@ def all(client: DocumentCloud, document: Document):
 
 def document_list(client: DocumentCloud, ids: list):
     "Download JSON to list documents"
-    url = urljoin(client.base_uri, f"{client.documents.api_path}.json")
+    path = f"{client.documents.api_path}.json"
     params = {"id__in": ",".join(map(str, ids))}
-    auth = (client.username, client.password)
-    output = ASSETS / "api" / "documents.json"
+    output = ASSETS / "api" / path
 
-    resp = httpx.get(url, params=params, auth=auth)
+    resp = client.get(path, params=params)
     resp.raise_for_status()
 
     docs = resp.json()
@@ -64,13 +63,12 @@ def document_list(client: DocumentCloud, ids: list):
 def document_data(client: DocumentCloud, id: int):
     "Download JSON data for a single document"
     print("Downloading document data")
-    url = urljoin(client.base_uri, f"{client.documents.api_path}/{id}.json")
+    path = f"{client.documents.api_path}/{id}.json"
     params = {"expand": EXPAND}
-    auth = (client.username, client.password)
 
-    output = ASSETS / "api" / "documents" / f"{id}.json"
+    output = ASSETS / "api" / path
 
-    resp = httpx.get(url, params=params, auth=auth)
+    resp = client.get(path, params=params)
     resp.raise_for_status()
 
     # fix asset URL for local hosting
